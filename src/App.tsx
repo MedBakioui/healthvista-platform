@@ -8,7 +8,9 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Doctors from "./pages/Doctors";
+import DoctorDetail from "./pages/DoctorDetail";
 import Appointments from "./pages/Appointments";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { Chatbot } from "./components/chat/Chatbot";
 
@@ -25,7 +27,9 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/doctors" element={<Doctors />} />
+          <Route path="/doctors/:id" element={<DoctorDetail />} />
           <Route path="/appointments" element={<Appointments />} />
+          <Route path="/profile" element={<Profile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
