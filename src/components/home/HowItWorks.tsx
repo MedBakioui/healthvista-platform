@@ -1,5 +1,4 @@
 
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, UserPlus, Calendar, Video, FileText } from 'lucide-react';
@@ -32,8 +31,6 @@ const steps = [
 ];
 
 export default function HowItWorks() {
-  const MotionArrow = motion.div;
-
   return (
     <section className="py-20 relative bg-gray-50 overflow-hidden">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
@@ -62,14 +59,9 @@ export default function HowItWorks() {
                 <p className="text-gray-600 text-center">{step.description}</p>
                 
                 {index < steps.length - 1 && (
-                  <MotionArrow 
-                    className="absolute top-8 -right-5 hidden lg:block"
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: 0.5 + index * 0.2, duration: 0.5 }}
-                  >
+                  <div className="absolute top-8 -right-5 hidden lg:block transition-opacity duration-500 opacity-100">
                     <ArrowRight className="h-6 w-6 text-gray-400" />
-                  </MotionArrow>
+                  </div>
                 )}
               </div>
             ))}

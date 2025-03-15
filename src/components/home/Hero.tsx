@@ -8,7 +8,7 @@ export default function Hero() {
     'Consultez un médecin en moins de 10 minutes',
     'Obtenez une ordonnance électronique',
     'Suivi médical personnalisé',
-    'Remboursé par l'Assurance Maladie'
+    'Remboursé par l\'Assurance Maladie'
   ];
 
   return (
