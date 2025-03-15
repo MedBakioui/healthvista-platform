@@ -57,8 +57,13 @@ const Appointments = () => {
   const pastAppointments = appointmentsData.filter(appointment => appointment.status === 'completed');
 
   // Format date from YYYY-MM-DD to a more readable format
-  const formatDate = (dateString) => {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
 
@@ -206,7 +211,7 @@ const Appointments = () => {
             <TabsContent value="new">
               <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-6">Prendre un rendez-vous</h2>
-                <AppointmentForm preselectedDoctorId={doctorId} />
+                <AppointmentForm />
               </div>
             </TabsContent>
           </Tabs>

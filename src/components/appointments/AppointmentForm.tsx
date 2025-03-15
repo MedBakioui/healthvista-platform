@@ -27,9 +27,13 @@ const timeSlots = [
   '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'
 ];
 
-export default function AppointmentForm() {
+type AppointmentFormProps = {
+  preselectedDoctorId?: string;
+};
+
+export default function AppointmentForm({ preselectedDoctorId }: AppointmentFormProps) {
   const [appointmentType, setAppointmentType] = useState<'video' | 'chat'>('video');
-  const [selectedDoctor, setSelectedDoctor] = useState<string>('');
+  const [selectedDoctor, setSelectedDoctor] = useState<string>(preselectedDoctorId || '');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(addDays(new Date(), 1));
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [reason, setReason] = useState<string>('');
