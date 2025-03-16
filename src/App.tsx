@@ -11,6 +11,9 @@ import Doctors from "./pages/Doctors";
 import DoctorDetail from "./pages/DoctorDetail";
 import Appointments from "./pages/Appointments";
 import Profile from "./pages/Profile";
+import HowItWorks from "./pages/HowItWorks";
+import Pricing from "./pages/Pricing";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import { Chatbot } from "./components/chat/Chatbot";
 
@@ -30,6 +33,9 @@ const App = () => (
           <Route path="/doctors/:id" element={<DoctorDetail />} />
           <Route path="/appointments" element={<Appointments />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
