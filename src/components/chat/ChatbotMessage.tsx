@@ -1,6 +1,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { Bot } from "lucide-react";
 
 type ChatbotMessageProps = {
   content: string;
@@ -19,9 +20,11 @@ export function ChatbotMessage({ content, isBot, timestamp }: ChatbotMessageProp
         isBot ? "flex-row" : "flex-row-reverse"
       )}>
         {isBot ? (
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-8 w-8 bg-blue-100">
             <AvatarImage src="/robot.png" alt="Chatbot" />
-            <AvatarFallback className="bg-blue-500 text-white">AI</AvatarFallback>
+            <AvatarFallback className="bg-blue-500 text-white">
+              <Bot className="h-4 w-4" />
+            </AvatarFallback>
           </Avatar>
         ) : (
           <Avatar className="h-8 w-8">
@@ -32,7 +35,7 @@ export function ChatbotMessage({ content, isBot, timestamp }: ChatbotMessageProp
         <div>
           <div className={cn(
             "rounded-xl px-4 py-2 text-sm",
-            isBot ? "bg-blue-50 border border-blue-100" : "bg-blue-500 text-white"
+            isBot ? "bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-100" : "bg-blue-500 text-white"
           )}>
             {content}
           </div>
