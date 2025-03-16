@@ -28,7 +28,7 @@ const fetchDoctor = async (id: string) => {
     address: '15 rue de la Santé, 75013 Paris',
     availability: '9h00 - 18h00, Lun-Ven',
     price: '25 €',
-    bio: 'Le Dr. Marie Dubois est médecin généraliste depuis plus de 15 ans. Diplômée de la faculté de médecine de Paris, elle a exercé en milieu hospitalier avant d'ouvrir son cabinet. Elle est particulièrement attentive à la relation médecin-patient et prend le temps d\'écouter et d\'expliquer les diagnostics et traitements.',
+    bio: "Le Dr. Marie Dubois est médecin généraliste depuis plus de 15 ans. Diplômée de la faculté de médecine de Paris, elle a exercé en milieu hospitalier avant d'ouvrir son cabinet. Elle est particulièrement attentive à la relation médecin-patient et prend le temps d'écouter et d'expliquer les diagnostics et traitements.",
     education: [
       { degree: 'Doctorat en Médecine', institution: 'Université Paris Descartes', year: '2005' },
       { degree: 'Spécialisation en Médecine Générale', institution: 'Hôpital Necker-Enfants Malades', year: '2008' }
