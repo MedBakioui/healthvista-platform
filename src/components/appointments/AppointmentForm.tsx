@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar as CalendarIcon, Clock, User, FileText, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,20 +12,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
 import { format, addDays } from 'date-fns';
 import { fr } from 'date-fns/locale';
-
-// Sample doctors data
-const doctors = [
-  { id: 1, name: 'Dr. Sophie Martin', specialty: 'Médecine générale' },
-  { id: 2, name: 'Dr. Thomas Dubois', specialty: 'Pédiatrie' },
-  { id: 3, name: 'Dr. Émilie Bernard', specialty: 'Dermatologie' },
-  { id: 4, name: 'Dr. Pierre Lambert', specialty: 'Cardiologie' },
-];
-
-// Sample time slots
-const timeSlots = [
-  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'
-];
+import { useQuery } from '@tanstack/react-query';
+import { fetchDoctors, bookAppointment } from '@/services/api';
 
 type AppointmentFormProps = {
   preselectedDoctorId?: string;
@@ -38,9 +26,29 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [reason, setReason] = useState<string>('');
   const [step, setStep] = useState<number>(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Fetch doctors
+  const { data: doctors = [] } = useQuery({
+    queryKey: ['doctors'],
+    queryFn: fetchDoctors,
+  });
+
+  // Set preselected doctor when data is loaded
+  useEffect(() => {
+    if (preselectedDoctorId && doctors.length > 0) {
+      setSelectedDoctor(preselectedDoctorId);
+    }
+  }, [preselectedDoctorId, doctors]);
+
+  // Time slots (this would typically come from an API based on doctor availability)
+  const timeSlots = [
+    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+    '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'
+  ];
 
   // Filter available time slots based on selected date and doctor
   // This is a placeholder - in a real app this would come from the backend
@@ -83,14 +91,32 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
         return;
       }
       
-      // Here you would typically save the appointment to your backend
-      toast({
-        title: "Rendez-vous confirmé!",
-        description: `Votre rendez-vous est confirmé pour le ${format(selectedDate!, 'PPP', { locale: fr })} à ${selectedTime}.`,
-      });
-      
-      // Redirect to confirmation page (or appointments page)
+      // Submit appointment
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedDoctor || !selectedDate || !selectedTime || !reason) return;
+    
+    setIsSubmitting(true);
+    try {
+      await bookAppointment(
+        selectedDoctor,
+        selectedDate,
+        selectedTime,
+        appointmentType,
+        reason
+      );
       navigate('/appointments');
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la création du rendez-vous.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -163,7 +189,7 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
                 </SelectTrigger>
                 <SelectContent>
                   {doctors.map((doctor) => (
-                    <SelectItem key={doctor.id} value={doctor.id.toString()}>
+                    <SelectItem key={doctor.id} value={doctor.id}>
                       <div className="flex items-center">
                         <span>{doctor.name}</span>
                         <span className="ml-2 text-sm text-gray-500">({doctor.specialty})</span>
@@ -271,7 +297,7 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
                 <div className="flex justify-between">
                   <dt className="text-gray-600">Médecin:</dt>
                   <dd className="font-medium text-gray-900">
-                    {doctors.find(d => d.id.toString() === selectedDoctor)?.name}
+                    {doctors.find(d => d.id === selectedDoctor)?.name || '-'}
                   </dd>
                 </div>
                 <div className="flex justify-between">
@@ -282,7 +308,7 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-gray-600">Heure:</dt>
-                  <dd className="font-medium text-gray-900">{selectedTime}</dd>
+                  <dd className="font-medium text-gray-900">{selectedTime || '-'}</dd>
                 </div>
               </dl>
             </div>
@@ -296,6 +322,7 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
             type="button"
             variant="outline"
             onClick={handleBack}
+            disabled={isSubmitting}
           >
             Retour
           </Button>
@@ -306,8 +333,9 @@ export default function AppointmentForm({ preselectedDoctorId }: AppointmentForm
           type="button"
           onClick={handleNext}
           className="bg-blue-500 hover:bg-blue-600 text-white"
+          disabled={isSubmitting}
         >
-          {step === 3 ? 'Confirmer le rendez-vous' : 'Continuer'}
+          {isSubmitting ? "En cours..." : (step === 3 ? 'Confirmer le rendez-vous' : 'Continuer')}
         </Button>
       </div>
     </div>
